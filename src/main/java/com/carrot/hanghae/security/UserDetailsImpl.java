@@ -7,7 +7,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 
 public class UserDetailsImpl implements UserDetails {
-
     private final User user;
 
     public UserDetailsImpl(User user) {
@@ -27,6 +26,28 @@ public class UserDetailsImpl implements UserDetails {
     public String getUsername() {
         return user.getUserId();
     }
+
+/*
+    private final String userId;
+    private final String userPw;
+
+    public UserDetailsImpl(String userId, String userPw) {
+        this.userId = userId;
+        this.userPw = userPw;
+    }
+
+
+    @Override
+    public String getPassword() {
+        return this.userPw();
+    }
+
+    @Override
+    public String getUsername() {
+        return this.userId();
+    }
+
+ */
 
     @Override
     public boolean isAccountNonExpired() {
