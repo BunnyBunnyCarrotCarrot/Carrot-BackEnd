@@ -25,6 +25,5 @@ public class User {
     public User (String userId, String userPw){
         this.userId = userId;
         this.userPw = userPw;
-
     }
 }
