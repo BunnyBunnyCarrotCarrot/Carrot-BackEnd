@@ -12,4 +12,5 @@ public class UserRequestDto {
     private final String userName;
     private final String userPw;
     private final String userPwCheck;
+    private final Long locationId;
 }

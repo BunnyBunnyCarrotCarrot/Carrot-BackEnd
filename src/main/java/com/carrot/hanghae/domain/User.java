@@ -23,8 +23,14 @@ public class User {
     @Column(nullable = false)
     private String userPw;
 
-    public User (String userId, String userPw){
+
+    @ManyToOne
+    @JoinColumn
+    private Location location;
+
+    public User (String userId, String userPw, Location location){
         this.userId = userId;
         this.userPw = userPw;
+        this.location = location;
     }
 }
