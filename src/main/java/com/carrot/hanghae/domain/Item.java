@@ -27,8 +27,9 @@ public class Item extends timestamp{
     @JoinColumn(name="USER_ID", nullable = false)
     private User user;
 
-    @OneToOne(mappedBy = "item")
-    private Item item;
+    @ManyToOne
+    @JoinColumn(name="CATEGORY_ID", nullable = false)
+    private Category category;
 
 
 
