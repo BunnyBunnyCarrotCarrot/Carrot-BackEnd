@@ -21,14 +21,17 @@ public class User {
     @Column(nullable = false)
     private String userPw;
 
+    @Column(nullable = false)
+    private String userName;
 
     @ManyToOne
     @JoinColumn
     private Location location;
 
-    public User (String userId, String userPw, Location location){
+    public User (String userId, String userPw, String userName, Location location){
         this.userId = userId;
         this.userPw = userPw;
+        this.userName = userName;
         this.location = location;
     }
 }
