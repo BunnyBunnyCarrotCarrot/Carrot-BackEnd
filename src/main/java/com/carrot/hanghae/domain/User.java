@@ -1,12 +1,10 @@
 package com.carrot.hanghae.domain;
 
-import com.carrot.hanghae.dto.UserRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor
