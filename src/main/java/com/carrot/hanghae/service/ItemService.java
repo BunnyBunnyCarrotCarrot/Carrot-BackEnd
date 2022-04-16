@@ -28,13 +28,14 @@ public class ItemService {
 
     //(Write.html)게시글 작성
     @Transactional
-    public ItemResponseDto registerPost(ItemRequestDto postDtos) {   //, List<String> imageUrls//User user
+    public ItemResponseDto registerItem(ItemRequestDto ItemDto, List<String> imageUrls) { //User user
 
-        String title = postDtos.getTitle();
-        int price = postDtos.getPrice();
-        String about = postDtos.getAbout();
+        String title = ItemDto.getTitle();
+        int price = ItemDto.getPrice();
+        String about = ItemDto.getAbout();
+        Long categoryId = ItemDto.getCategoryId();
 
-        Category category = categoryRepository.findById(postDtos.getCategoryId()).orElseThrow(
+        Category category = categoryRepository.findById(categoryId).orElseThrow(
                 () -> new IllegalArgumentException("해당 카테고리가 DB에 존재하지 않습니다.")
         );
 
@@ -62,14 +63,34 @@ public class ItemService {
 
 
         //이미지 URL 저장하기
-//        List<String> returnImages = new ArrayList<>(); //return 값 보려구요~
-//        for(String imageUrl : imageUrls){
-//            ImageUrl image = new ImageUrl(imageUrl, item);
-//            imageUrlRepository.save(image);
-//            returnImages.add(image.getImageUrl());
-//        }
+        List<String> images = new ArrayList<>(); //return 값 보려구요~
+        for(String imageUrl : imageUrls){
+            ImageUrl image = new ImageUrl(imageUrl, item);
+            imageUrlRepository.save(image);
+            images.add(image.getImageUrl());
+        }
 
         //return 값 생성
-        return new ItemResponseDto(title, price, category); //, imageUrls
+        return new ItemResponseDto(title, price, images, category);
+    }
+
+    public ItemResponseDto updateItem(Long itemId, ItemRequestDto itemDto, List<String> imageUrls) {
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new IllegalStateException("해당 게시글이 없습니다."));
+        System.out.println(item);
+        Category category = categoryRepository.findById(itemDto.getCategoryId())
+                .orElseThrow(() -> new IllegalStateException("해당 카테고리가 없습니다."));
+        item.update(itemDto, category);
+        System.out.println(item);
+
+        //이미지 URL 저장하기
+        List<String> images = new ArrayList<>(); //return 값 보려구요~
+        for(String imageUrl : imageUrls){
+            ImageUrl image = new ImageUrl(imageUrl, item);
+            imageUrlRepository.save(image);
+            images.add(image.getImageUrl());
+        }
+
+        return new ItemResponseDto(item, images);
     }
 }

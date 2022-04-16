@@ -1,5 +1,6 @@
 package com.carrot.hanghae.domain;
 
+import com.carrot.hanghae.dto.ItemRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,7 +29,7 @@ public class Item extends timestamped {
     @JoinColumn(name="USER_ID", nullable = false)
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="CATEGORY_ID", nullable = false)
     private Category category;
 
@@ -39,6 +40,13 @@ public class Item extends timestamped {
         this.price = price;
         this.about = about;
         this.user = user;
+        this.category = category;
+    }
+
+    public void update(ItemRequestDto itemDto, Category category) {
+        this.title = itemDto.getTitle();
+        this.price = itemDto.getPrice();
+        this.about = itemDto.getAbout();
         this.category = category;
     }
 }

@@ -13,6 +13,5 @@ public class ItemRequestDto {
     private String title;
     private int price;
     private String about;
-//    private List<String> imageUrl;
     private Long categoryId;
 }

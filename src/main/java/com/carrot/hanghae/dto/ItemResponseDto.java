@@ -2,6 +2,7 @@ package com.carrot.hanghae.dto;
 
 
 import com.carrot.hanghae.domain.Category;
+import com.carrot.hanghae.domain.Item;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,13 @@ import java.util.List;
 public class ItemResponseDto {
     private String title;
     private int price;
-//    private List<String> imageUrl;
+    private List<String> imageUrl;
     private Category category;
+
+    public ItemResponseDto(Item item, List<String> imageUrl){
+        this.title = item.getTitle();
+        this.price = item.getPrice();
+        this.imageUrl = imageUrl;
+        this.category = item.getCategory();
+    }
 }

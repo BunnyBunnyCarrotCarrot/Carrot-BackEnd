@@ -8,6 +8,8 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.carrot.hanghae.domain.ImageUrl;
+import com.carrot.hanghae.repository.ImageUrlRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -39,6 +41,8 @@ public class S3Service {
 
     private final String bucket = "bucketlist5";
 
+    private final ImageUrlRepository imageUrlRepository;
+
     @PostConstruct
     public void setS3Client() {
         AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
@@ -50,49 +54,59 @@ public class S3Service {
     }
 
     // 최초 게시글 작성
-    public List<String> upload(List<MultipartFile> file){
+    public List<String> upload(List<MultipartFile> files){
         List<String> imageUrls = new ArrayList<>();
 
-        for(MultipartFile image : file){
-            String fileName = createFileName(image.getOriginalFilename());
+        for(MultipartFile file : files){
+            String fileName = createFileName(file.getOriginalFilename());
             ObjectMetadata objectMetadata = new ObjectMetadata();
-            objectMetadata.setContentLength(image.getSize());
-            objectMetadata.setContentType(image.getContentType());
+            objectMetadata.setContentLength(file.getSize());
+            objectMetadata.setContentType(file.getContentType());
 
-            try(InputStream inputStream = image.getInputStream()) {
+            try(InputStream inputStream = file.getInputStream()) {
                 s3Client.putObject(new PutObjectRequest(bucket,fileName,inputStream,objectMetadata)
                         .withCannedAcl(CannedAccessControlList.PublicRead));
                 imageUrls.add(s3Client.getUrl(bucket, fileName).toString());
             }catch (IOException e){
                 throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,"파일 업로드에 실패하셨습니다");
             }
-        } return imageUrls;
+        }
+        return imageUrls;
     }
+
 
     // 글 수정 시 기존 s3에 있는 이미지 정보 삭제
-    public String upload(MultipartFile file, String newFilePath){
-        String fileName = createFileName(file.getOriginalFilename());
-        ObjectMetadata objectMetadata = new ObjectMetadata();
-        objectMetadata.setContentLength(file.getSize());
-        objectMetadata.setContentType(file.getContentType());
+    public List<String> update(List<MultipartFile> files, List<ImageUrl> lastImages) {
 
-          if(!"".equals(newFilePath) && newFilePath != null){
-            boolean isExistObject = s3Client.doesObjectExist(bucket,newFilePath);
-            if(isExistObject){
-                s3Client.deleteObject(bucket,newFilePath);
+//        Long lastImageId = lastImages.get(0).getId();
+//        imageUrlRepository.deleteById(lastImageId);
+
+        for(ImageUrl lastImage : lastImages){
+            if (!"".equals(lastImage.getImageUrl()) && lastImage.getImageUrl() != null) {
+                boolean isExistObject = s3Client.doesObjectExist(bucket, lastImage.getImageUrl());
+                if (isExistObject) {
+                    s3Client.deleteObject(bucket, lastImage.getImageUrl());
+                }
             }
+            imageUrlRepository.deleteById(lastImage.getId());
         }
 
-        try(InputStream inputStream = file.getInputStream()) {
-            s3Client.putObject(new PutObjectRequest(bucket,fileName,inputStream,objectMetadata)
-                    .withCannedAcl(CannedAccessControlList.PublicRead));
-            return s3Client.getUrl(bucket, fileName).toString();
-        }catch (IOException e){
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,"파일 업로드에 실패하셨습니다");
-        }
-
+        //        for(MultipartFile file : files){
+//            String fileName = createFileName(file.getOriginalFilename());
+//            ObjectMetadata objectMetadata = new ObjectMetadata();
+//            objectMetadata.setContentLength(file.getSize());
+//            objectMetadata.setContentType(file.getContentType());
+//
+//            try(InputStream inputStream = file.getInputStream()) {
+//                s3Client.putObject(new PutObjectRequest(bucket,fileName,inputStream,objectMetadata)
+//                        .withCannedAcl(CannedAccessControlList.PublicRead));
+//                imageUrls.add(s3Client.getUrl(bucket, fileName).toString());
+//            }catch (IOException e){
+//                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,"파일 업로드에 실패하셨습니다");
+//            }
+//        }
+        return upload(files);
     }
-
 
 
     private String createFileName(String fileName) {
