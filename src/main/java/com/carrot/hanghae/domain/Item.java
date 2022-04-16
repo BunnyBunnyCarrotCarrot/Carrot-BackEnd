@@ -4,12 +4,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import javax.persistence.*;
+import java.util.Optional;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
-public class Item extends timestamp{
+public class Item extends timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
@@ -33,10 +34,11 @@ public class Item extends timestamp{
 
 
 
-    public Item(String title, int price, String about, User user){
+    public Item(String title, int price, String about, User user, Category category){
         this.title = title;
         this.price = price;
         this.about = about;
         this.user = user;
+        this.category = category;
     }
 }

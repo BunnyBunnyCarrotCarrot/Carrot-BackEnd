@@ -1,17 +1,17 @@
 package com.carrot.hanghae.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
-public class File extends timestamp{
+public class ImageUrl extends timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
@@ -19,12 +19,12 @@ public class File extends timestamp{
     @Column(columnDefinition = "TEXT")
     private String imageUrl;
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    //@JsonIgnore
+    @ManyToOne //(fetch = FetchType.LAZY)
     @JoinColumn(name = "ITEM_ID", nullable = false)
     private Item item;
 
-    public File(String imageUrl, Item item){
+    public ImageUrl(String imageUrl, Item item){
         this.imageUrl = imageUrl;
         this.item = item;
     }

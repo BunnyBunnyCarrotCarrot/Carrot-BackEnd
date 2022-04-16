@@ -1,5 +1,6 @@
 package com.carrot.hanghae.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,19 +12,12 @@ import java.util.List;
 @NoArgsConstructor
 @Setter
 @Entity
+@AllArgsConstructor
 public class Location {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
+    @Column(nullable = false, unique = true)
     private Long id;
 
-    @Column(nullable = false)
+    @Column
     private String name;
-
-    @OneToOne(mappedBy = "location")
-    private User user;
-
-
-    public Location(String name){
-        this.name = name;
-    }
 }

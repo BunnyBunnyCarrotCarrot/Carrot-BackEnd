@@ -3,16 +3,16 @@ package com.carrot.hanghae.domain;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.mapping.ToOne;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
-public class User extends timestamp {
+public class User extends timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
@@ -23,15 +23,9 @@ public class User extends timestamp {
     @Column(nullable = false)
     private String userPw;
 
-    @OneToOne
-    @JoinColumn(name="LOCATION_ID", nullable = false)
+    @ManyToOne
+    @JoinColumn(name="LOCATION_ID")
     private Location location;
-
-    @OneToMany(mappedBy = "user")
-    private List<Item> item;
-
-    @OneToMany(mappedBy = "user")
-    private List<Good> good;
 
 
     public User(String userId, String userPw, Location location){
