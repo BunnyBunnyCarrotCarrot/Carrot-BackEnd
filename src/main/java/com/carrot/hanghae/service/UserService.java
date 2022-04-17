@@ -31,7 +31,26 @@ public class UserService {
         String inputPw2 = requestDto.getUserPwCheck();
         Long locationId = requestDto.getLocationId();
 
-        //아이디 닉네임 중복 검사
+        //아이디 닉네임 비밀번호 유효성 검사
+        validCheck(requestDto);
+        //지역 코드 검사
+        Location location = locationRepository.findById(locationId).orElseThrow(
+                () -> new CustomException(ErrorCode.NOT_FOUND_LOCATION_ID)
+        );
+
+        String userPw = passwordEncoder.encode(requestDto.getUserPw());
+
+        User user = new User(userId, userPw, userName, location);
+
+        userRepository.save(user);
+    }
+
+    private void validCheck(UserRequestDto requestDto) {
+        String userId = requestDto.getUserId();
+        String userName = requestDto.getUserName();
+        String inputPw = requestDto.getUserPw();
+        String inputPw2 = requestDto.getUserPwCheck();
+
         Optional<User> foundById = userRepository.findByUserId(userId);
         if (foundById.isPresent()) {
             throw new CustomException(ErrorCode.DUPLICATED_USER_ID);
@@ -40,52 +59,41 @@ public class UserService {
         if (foundByName.isPresent()) {
             throw new CustomException(ErrorCode.DUPLICATED_USER_NAME);
         }
-        //지역 코드 검사
-        Location location = locationRepository.findById(locationId).orElseThrow(
-                () -> new CustomException(ErrorCode.NOT_FOUND_LOCATION_ID)
-        );
         // 아이디 유효성 검사
         Pattern userIdPattern = Pattern.compile("^(?=.*[A-Za-z])(?=.*\\d)[a-zA-Z0-9]{4,15}$");
         Matcher userIdMatcher = userIdPattern.matcher(userId);
-        if(userId.length() == 0){
+        if (userId.length() == 0) {
             throw new CustomException(ErrorCode.BLANK_USER_ID);
         }
-        if(!userIdMatcher.matches()) {
+        if (!userIdMatcher.matches()) {
             throw new CustomException(ErrorCode.INVALID_PATTERN_USER_ID);
         }
         // 닉네임
         Pattern userNamePattern = Pattern.compile("^\\S{2,6}$");
         Matcher userNameMatcher = userNamePattern.matcher(userName);
-        if(userName.length() == 0){
+        if (userName.length() == 0) {
             throw new CustomException(ErrorCode.BLANK_USER_NAME);
         }
-        if(!userNameMatcher.matches()) {
+        if (!userNameMatcher.matches()) {
             throw new CustomException(ErrorCode.INVALID_PATTERN_USER_NAME);
         }
 
         // 비밀번호 유효성 검사
         Pattern userPwPattern = Pattern.compile("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$])[A-Za-z\\d!@#$]{8,16}$");
         Matcher userPwMatcher = userPwPattern.matcher(inputPw);
-        if(inputPw.length() == 0){
+        if (inputPw.length() == 0) {
             throw new CustomException(ErrorCode.BLANK_USER_PW);
         }
-        if(!userPwMatcher.matches()) {
+        if (!userPwMatcher.matches()) {
             throw new CustomException(ErrorCode.INVALID_PATTERN_USER_PW);
         }
 
         // password 일치여부
-        if(inputPw2.length() == 0){
+        if (inputPw2.length() == 0) {
             throw new CustomException(ErrorCode.BLANK_USER_PW_CHECK);
         }
-        if(!inputPw.equals(inputPw2)){
+        if (!inputPw.equals(inputPw2)) {
             throw new CustomException(ErrorCode.NOT_EQUAL_USER_PW_CHECK);
         }
-
-        String userPw = passwordEncoder.encode(requestDto.getUserPw());
-        String userPwCheck = passwordEncoder.encode(requestDto.getUserPwCheck());
-
-        User user = new User(userId, userPw, userName, location);
-
-        userRepository.save(user);
     }
 }
