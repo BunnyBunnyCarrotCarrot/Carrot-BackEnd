@@ -2,6 +2,7 @@ package com.carrot.hanghae.service;
 
 import com.carrot.hanghae.domain.User;
 import com.carrot.hanghae.dto.UserRequestDto;
+import com.carrot.hanghae.exception.CustomException;
 import com.carrot.hanghae.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,11 +54,12 @@ class UserServiceTest {
         );
 
         //when
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        CustomException customException = assertThrows(CustomException.class, () -> {
             userService.registerUser(userRequestDto);
         });
+
         //then
-        assertThat(exception.getMessage()).isEqualTo("4자~15자 영어 숫자 조합으로 입력해주세요.");
+        assertThat(customException.getErrorCode().getErrorMessage()).isEqualTo("아이디를 4자~15자 영어 숫자 조합으로 입력해주세요.");
     }
 
     @Test
@@ -72,12 +74,12 @@ class UserServiceTest {
         );
 
         //when
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        CustomException customException = assertThrows(CustomException.class, () -> {
             userService.registerUser(userRequestDto);
         });
 
         //then
-        assertThat(exception.getMessage()).isEqualTo("4자~15자 영어 숫자 조합으로 입력해주세요.");
+        assertThat(customException.getErrorCode().getErrorMessage()).isEqualTo("아이디를 4자~15자 영어 숫자 조합으로 입력해주세요.");
     }
 
     @Test
@@ -92,12 +94,12 @@ class UserServiceTest {
         );
 
         //when
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        CustomException customException = assertThrows(CustomException.class, () -> {
             userService.registerUser(userRequestDto);
         });
 
         //then
-        assertThat(exception.getMessage()).isEqualTo("4자~15자 영어 숫자 조합으로 입력해주세요.");
+        assertThat(customException.getErrorCode().getErrorMessage()).isEqualTo("아이디를 4자~15자 영어 숫자 조합으로 입력해주세요.");
     }
 
     @Test
@@ -112,12 +114,12 @@ class UserServiceTest {
         );
 
         //when
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        CustomException customException = assertThrows(CustomException.class, () -> {
             userService.registerUser(userRequestDto);
         });
 
         //then
-        assertThat(exception.getMessage()).isEqualTo("4자~15자 영어 숫자 조합으로 입력해주세요.");
+        assertThat(customException.getErrorCode().getErrorMessage()).isEqualTo("아이디를 4자~15자 영어 숫자 조합으로 입력해주세요.");
     }
 
     @Test
@@ -132,12 +134,12 @@ class UserServiceTest {
         );
 
         //when
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        CustomException customException = assertThrows(CustomException.class, () -> {
             userService.registerUser(userRequestDto);
         });
 
         //then
-        assertThat(exception.getMessage()).isEqualTo("아이디는 필수 입력값입니다.");
+        assertThat(customException.getErrorCode().getErrorMessage()).isEqualTo("아이디는 필수 입력값입니다.");
     }
 
     @Test
@@ -160,12 +162,12 @@ class UserServiceTest {
         );
 
         //when
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            userService.registerUser(userRequestDto2);
+        CustomException customException = assertThrows(CustomException.class, () -> {
+            userService.registerUser(userRequestDto);
         });
 
         //then
-        assertThat(exception.getMessage()).isEqualTo("중복된 사용자 ID 가 존재합니다.");
+        assertThat(customException.getErrorCode().getErrorMessage()).isEqualTo("유저아이디가 이미 존재합니다.");
     }
 
     @Test
@@ -180,12 +182,12 @@ class UserServiceTest {
         );
 
         //when
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        CustomException customException = assertThrows(CustomException.class, () -> {
             userService.registerUser(userRequestDto);
         });
 
         //then
-        assertThat(exception.getMessage()).isEqualTo("2자~6자로 입력해주세요.");
+        assertThat(customException.getErrorCode().getErrorMessage()).isEqualTo("닉네임을 2자~6자로 입력해주세요.");
     }
 
     @Test
@@ -200,12 +202,12 @@ class UserServiceTest {
         );
 
         //when
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        CustomException customException = assertThrows(CustomException.class, () -> {
             userService.registerUser(userRequestDto);
         });
 
         //then
-        assertThat(exception.getMessage()).isEqualTo("2자~6자로 입력해주세요.");
+        assertThat(customException.getErrorCode().getErrorMessage()).isEqualTo("닉네임을 2자~6자로 입력해주세요.");
     }
 
     @Test
@@ -220,12 +222,12 @@ class UserServiceTest {
         );
 
         //when
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        CustomException customException = assertThrows(CustomException.class, () -> {
             userService.registerUser(userRequestDto);
         });
 
         //then
-        assertThat(exception.getMessage()).isEqualTo("닉네임은 필수 입력값입니다.");
+        assertThat(customException.getErrorCode().getErrorMessage()).isEqualTo("닉네임은 필수 입력값입니다.");
     }
 
     @Test
@@ -248,12 +250,12 @@ class UserServiceTest {
         );
 
         //when
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        CustomException customException = assertThrows(CustomException.class, () -> {
             userService.registerUser(userRequestDto2);
         });
 
         //then
-        assertThat(exception.getMessage()).isEqualTo("중복된 사용자 닉네임 이 존재합니다.");
+        assertThat(customException.getErrorCode().getErrorMessage()).isEqualTo("유저닉네임이 이미 존재합니다.");
     }
 
 
@@ -269,12 +271,12 @@ class UserServiceTest {
         );
 
         //when
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        CustomException customException = assertThrows(CustomException.class, () -> {
             userService.registerUser(userRequestDto);
         });
 
         //then
-        assertThat(exception.getMessage()).isEqualTo("비밀번호는 필수 입력값입니다.");
+        assertThat(customException.getErrorCode().getErrorMessage()).isEqualTo("비밀번호는 필수 입력값입니다.");
     }
 
     @Test
@@ -289,12 +291,12 @@ class UserServiceTest {
         );
 
         //when
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        CustomException customException = assertThrows(CustomException.class, () -> {
             userService.registerUser(userRequestDto);
         });
 
         //then
-        assertThat(exception.getMessage()).isEqualTo("비밀번호는 영어,숫자,특수문자!@#$ 를 사용하여 6~15자로 입력해주세요.");
+        assertThat(customException.getErrorCode().getErrorMessage()).isEqualTo("비밀번호는 영어,숫자,특수문자!@#$ 를 사용하여 6~15자로 입력해주세요.");
     }
 
     @Test
@@ -309,12 +311,12 @@ class UserServiceTest {
         );
 
         //when
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        CustomException customException = assertThrows(CustomException.class, () -> {
             userService.registerUser(userRequestDto);
         });
 
         //then
-        assertThat(exception.getMessage()).isEqualTo("비밀번호는 영어,숫자,특수문자!@#$ 를 사용하여 6~15자로 입력해주세요.");
+        assertThat(customException.getErrorCode().getErrorMessage()).isEqualTo("비밀번호는 영어,숫자,특수문자!@#$ 를 사용하여 6~15자로 입력해주세요.");
     }
 
     @Test
@@ -329,12 +331,12 @@ class UserServiceTest {
         );
 
         //when
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        CustomException customException = assertThrows(CustomException.class, () -> {
             userService.registerUser(userRequestDto);
         });
 
         //then
-        assertThat(exception.getMessage()).isEqualTo("비밀번호가 일치하지 않습니다.");
+        assertThat(customException.getErrorCode().getErrorMessage()).isEqualTo("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
     }
 
     @Test
@@ -349,11 +351,11 @@ class UserServiceTest {
         );
 
         //when
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        CustomException customException = assertThrows(CustomException.class, () -> {
             userService.registerUser(userRequestDto);
         });
 
         //then
-        assertThat(exception.getMessage()).isEqualTo("비밀번호 재확인은 필수입니다.");
+        assertThat(customException.getErrorCode().getErrorMessage()).isEqualTo("비밀번호 확인은 필수 입력값입니다.");
     }
 }
