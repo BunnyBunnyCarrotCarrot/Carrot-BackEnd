@@ -15,8 +15,6 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.carrot.hanghae.exception.ErrorCode.*;
-
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -29,7 +27,7 @@ public class UserService {
         String userName = requestDto.getUserName();
         String inputPw = requestDto.getUserPw();
         String inputPw2 = requestDto.getUserPwCheck();
-        Long locationId = requestDto.getLocationId();
+        Long locationId = requestDto.getUserLocation();
 
         //아이디 닉네임 비밀번호 유효성 검사
         checkUserId(userId);
