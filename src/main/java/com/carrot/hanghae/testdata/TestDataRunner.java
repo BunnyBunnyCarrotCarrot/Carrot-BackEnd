@@ -34,10 +34,10 @@ public class TestDataRunner implements ApplicationRunner {
 // 테스트 User 생성
         // 테스트 User 의 관심상품 등록
         // 검색어 당 관심상품 10개 등록
-        createTestData(1L, "서울");
-        createTestData(2L, "인천");
-        createTestData(3L, "부산");
-        createTestData(4L, "경기");
+//        createTestData(1L, "서울");
+//        createTestData(2L, "인천");
+//        createTestData(3L, "부산");
+//        createTestData(4L, "경기");
 //        Location location = locationRepository.findById(1L).orElseThrow(
 //                () -> new IllegalArgumentException("잘못된 접근입니다.")
 //        );

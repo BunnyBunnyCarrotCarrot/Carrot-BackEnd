@@ -1,5 +1,7 @@
 package com.carrot.hanghae.security;
 
+import com.carrot.hanghae.domain.User;
+import com.carrot.hanghae.dto.UserResponseDto;
 import com.carrot.hanghae.security.jwt.JwtTokenUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.core.Authentication;
@@ -24,13 +26,14 @@ public class FormLoginSuccessHandler extends SavedRequestAwareAuthenticationSucc
         System.out.println("FormLoginSuccessHandler token = " + token);
         response.addHeader(AUTH_HEADER, TOKEN_TYPE + " " + token);
 
+
         //UserId 내려주기
-//        response.setContentType("application/json");
-//        User user = userDetails.getUser();
-//        UserDto responseDto = new UserDto(user);
-//
-//        String result = mapper.writeValueAsString(responseDto);
-//        response.getWriter().write(result);
+        response.setContentType("application/json");
+        User user = userDetails.getUser();
+        UserResponseDto responseDto = new UserResponseDto(user);
+
+        String result = mapper.writeValueAsString(responseDto);
+        response.getWriter().write(result);
     }
 
 }
