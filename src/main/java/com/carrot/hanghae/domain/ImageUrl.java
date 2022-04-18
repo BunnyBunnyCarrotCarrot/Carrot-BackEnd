@@ -28,9 +28,4 @@ public class ImageUrl extends timestamped {
         this.imageUrls = imageUrls;
         this.item = item;
     }
-
-    //실험성공 시 지우기
-    public ImageUrl(String imageUrls){
-        this.imageUrls = imageUrls;
-    }
 }

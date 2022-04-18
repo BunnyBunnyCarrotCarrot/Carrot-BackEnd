@@ -1,5 +1,6 @@
 package com.carrot.hanghae.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,6 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class User extends timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +27,9 @@ public class User extends timestamped {
 
     @Column(nullable = false)
     private String userPw;
+
+    @Column
+    private String imgUrl;
 
     @ManyToOne
     @JoinColumn(name="LOCATION_ID")
