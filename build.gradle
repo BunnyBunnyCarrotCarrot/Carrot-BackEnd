@@ -47,7 +47,7 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok:1.18.12'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
     //S3 연결 라이브러리
-//    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-aws', version: '2.2.5.RELEASE'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-aws', version: '2.2.5.RELEASE'
 
 }
 

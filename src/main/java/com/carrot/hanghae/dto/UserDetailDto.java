@@ -1,5 +1,6 @@
 package com.carrot.hanghae.dto;
 
+import com.carrot.hanghae.domain.Location;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,10 +8,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class UserRequestDto {
+public class UserDetailDto {
     private final String userId;
     private final String userName;
-    private final String userPw;
-    private final String userPwCheck;
-    private final Long userLocation;
+    private final Location location;
+    private final String userImageUrl;
 }

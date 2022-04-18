@@ -1,6 +1,6 @@
 package com.carrot.hanghae.domain;
 
-import lombok.Builder;
+import com.carrot.hanghae.dto.UserSignupRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,13 +30,18 @@ public class User {
     @JoinColumn
     private Location location;
 
-    @ColumnDefault("'https://bucketlist5.s3.ap-northeast-2.amazonaws.com/당근이.png'")
+    @Column
     private String imgUrl;
 
     public User (String userId, String userPw, String userName, Location location, String imgUrl){
         this.userId = userId;
         this.userPw = userPw;
         this.userName = userName;
+        this.location = location;
+        this.imgUrl = imgUrl;
+    }
+
+    public void update(Location location, String imgUrl) {
         this.location = location;
         this.imgUrl = imgUrl;
     }

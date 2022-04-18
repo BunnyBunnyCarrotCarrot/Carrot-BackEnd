@@ -1,7 +1,7 @@
 package com.carrot.hanghae.service;
 
 import com.carrot.hanghae.domain.User;
-import com.carrot.hanghae.dto.UserRequestDto;
+import com.carrot.hanghae.dto.UserSignupRequestDto;
 import com.carrot.hanghae.exception.CustomException;
 import com.carrot.hanghae.repository.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -23,7 +23,7 @@ class UserServiceTest {
     @Test
     void 유저등록() {
         //given
-        UserRequestDto userRequestDto = new UserRequestDto(
+        UserSignupRequestDto userSignupRequestDto = new UserSignupRequestDto(
                 "testUser1",
                 "이름",
                 "1q2w3e4r!",
@@ -32,7 +32,7 @@ class UserServiceTest {
         );
 
         //when
-        userService.registerUser(userRequestDto);
+        userService.registerUser(userSignupRequestDto);
 
         //then
         User user = userRepository.findByUserId("testUser1").orElseThrow(
@@ -45,7 +45,7 @@ class UserServiceTest {
     @Test
     void 유저아이디_숫자없음() {
         //given
-        UserRequestDto userRequestDto = new UserRequestDto(
+        UserSignupRequestDto userSignupRequestDto = new UserSignupRequestDto(
                 "testUser",
                 "이름",
                 "1q2w3e4r!",
@@ -55,7 +55,7 @@ class UserServiceTest {
 
         //when
         CustomException customException = assertThrows(CustomException.class, () -> {
-            userService.registerUser(userRequestDto);
+            userService.registerUser(userSignupRequestDto);
         });
 
         //then
@@ -65,7 +65,7 @@ class UserServiceTest {
     @Test
     void 유저아이디_영어없음() {
         //given
-        UserRequestDto userRequestDto = new UserRequestDto(
+        UserSignupRequestDto userSignupRequestDto = new UserSignupRequestDto(
                 "123456789",
                 "이름",
                 "1q2w3e4r!",
@@ -75,7 +75,7 @@ class UserServiceTest {
 
         //when
         CustomException customException = assertThrows(CustomException.class, () -> {
-            userService.registerUser(userRequestDto);
+            userService.registerUser(userSignupRequestDto);
         });
 
         //then
@@ -85,7 +85,7 @@ class UserServiceTest {
     @Test
     void 유저아이디_범위넘음() {
         //given
-        UserRequestDto userRequestDto = new UserRequestDto(
+        UserSignupRequestDto userSignupRequestDto = new UserSignupRequestDto(
                 "abcdefghijklmnop123456789",
                 "이름",
                 "1q2w3e4r!",
@@ -95,7 +95,7 @@ class UserServiceTest {
 
         //when
         CustomException customException = assertThrows(CustomException.class, () -> {
-            userService.registerUser(userRequestDto);
+            userService.registerUser(userSignupRequestDto);
         });
 
         //then
@@ -105,7 +105,7 @@ class UserServiceTest {
     @Test
     void 유저아이디_범위작음() {
         //given
-        UserRequestDto userRequestDto = new UserRequestDto(
+        UserSignupRequestDto userSignupRequestDto = new UserSignupRequestDto(
                 "ab1",
                 "이름",
                 "1q2w3e4r!",
@@ -115,7 +115,7 @@ class UserServiceTest {
 
         //when
         CustomException customException = assertThrows(CustomException.class, () -> {
-            userService.registerUser(userRequestDto);
+            userService.registerUser(userSignupRequestDto);
         });
 
         //then
@@ -125,7 +125,7 @@ class UserServiceTest {
     @Test
     void 유저아이디_빈값() {
         //given
-        UserRequestDto userRequestDto = new UserRequestDto(
+        UserSignupRequestDto userSignupRequestDto = new UserSignupRequestDto(
                 "",
                 "이름",
                 "1q2w3e4r!",
@@ -135,7 +135,7 @@ class UserServiceTest {
 
         //when
         CustomException customException = assertThrows(CustomException.class, () -> {
-            userService.registerUser(userRequestDto);
+            userService.registerUser(userSignupRequestDto);
         });
 
         //then
@@ -145,15 +145,15 @@ class UserServiceTest {
     @Test
     void 유저아이디_중복() {
         //given
-        UserRequestDto userRequestDto = new UserRequestDto(
+        UserSignupRequestDto userSignupRequestDto = new UserSignupRequestDto(
                 "test1234",
                 "이름",
                 "1q2w3e4r!",
                 "1q2w3e4r!",
                 11L
         );
-        userService.registerUser(userRequestDto);
-        UserRequestDto userRequestDto2 = new UserRequestDto(
+        userService.registerUser(userSignupRequestDto);
+        UserSignupRequestDto userSignupRequestDto2 = new UserSignupRequestDto(
                 "test1234",
                 "이름123",
                 "1q2w3e4r!",
@@ -163,7 +163,7 @@ class UserServiceTest {
 
         //when
         CustomException customException = assertThrows(CustomException.class, () -> {
-            userService.registerUser(userRequestDto);
+            userService.registerUser(userSignupRequestDto);
         });
 
         //then
@@ -173,7 +173,7 @@ class UserServiceTest {
     @Test
     void 유저닉네임_범위넘음() {
         //given
-        UserRequestDto userRequestDto = new UserRequestDto(
+        UserSignupRequestDto userSignupRequestDto = new UserSignupRequestDto(
                 "test1234",
                 "범위넓게범위넓게범위넓게",
                 "1q2w3e4r!",
@@ -183,7 +183,7 @@ class UserServiceTest {
 
         //when
         CustomException customException = assertThrows(CustomException.class, () -> {
-            userService.registerUser(userRequestDto);
+            userService.registerUser(userSignupRequestDto);
         });
 
         //then
@@ -193,7 +193,7 @@ class UserServiceTest {
     @Test
     void 유저닉네임_범위작음() {
         //given
-        UserRequestDto userRequestDto = new UserRequestDto(
+        UserSignupRequestDto userSignupRequestDto = new UserSignupRequestDto(
                 "test1234",
                 "범",
                 "1q2w3e4r!",
@@ -203,7 +203,7 @@ class UserServiceTest {
 
         //when
         CustomException customException = assertThrows(CustomException.class, () -> {
-            userService.registerUser(userRequestDto);
+            userService.registerUser(userSignupRequestDto);
         });
 
         //then
@@ -213,7 +213,7 @@ class UserServiceTest {
     @Test
     void 유저닉네임_빈값() {
         //given
-        UserRequestDto userRequestDto = new UserRequestDto(
+        UserSignupRequestDto userSignupRequestDto = new UserSignupRequestDto(
                 "test1234",
                 "",
                 "1q2w3e4r!",
@@ -223,7 +223,7 @@ class UserServiceTest {
 
         //when
         CustomException customException = assertThrows(CustomException.class, () -> {
-            userService.registerUser(userRequestDto);
+            userService.registerUser(userSignupRequestDto);
         });
 
         //then
@@ -233,15 +233,15 @@ class UserServiceTest {
     @Test
     void 유저닉네임_중복() {
         //given
-        UserRequestDto userRequestDto = new UserRequestDto(
+        UserSignupRequestDto userSignupRequestDto = new UserSignupRequestDto(
                 "test1234",
                 "이름",
                 "1q2w3e4r!",
                 "1q2w3e4r!",
                 11L
         );
-        userService.registerUser(userRequestDto);
-        UserRequestDto userRequestDto2 = new UserRequestDto(
+        userService.registerUser(userSignupRequestDto);
+        UserSignupRequestDto userSignupRequestDto2 = new UserSignupRequestDto(
                 "test12345",
                 "이름",
                 "1q2w3e4r!",
@@ -251,7 +251,7 @@ class UserServiceTest {
 
         //when
         CustomException customException = assertThrows(CustomException.class, () -> {
-            userService.registerUser(userRequestDto2);
+            userService.registerUser(userSignupRequestDto2);
         });
 
         //then
@@ -262,7 +262,7 @@ class UserServiceTest {
     @Test
     void 비밀번호_빈값() {
         //given
-        UserRequestDto userRequestDto = new UserRequestDto(
+        UserSignupRequestDto userSignupRequestDto = new UserSignupRequestDto(
                 "test1234",
                 "비밀",
                 "",
@@ -272,7 +272,7 @@ class UserServiceTest {
 
         //when
         CustomException customException = assertThrows(CustomException.class, () -> {
-            userService.registerUser(userRequestDto);
+            userService.registerUser(userSignupRequestDto);
         });
 
         //then
@@ -282,7 +282,7 @@ class UserServiceTest {
     @Test
     void 비밀번호_범위큼() {
         //given
-        UserRequestDto userRequestDto = new UserRequestDto(
+        UserSignupRequestDto userSignupRequestDto = new UserSignupRequestDto(
                 "test1234",
                 "비밀",
                 "1q2w3e4r1q2w3e4r1q2w3e4r",
@@ -292,7 +292,7 @@ class UserServiceTest {
 
         //when
         CustomException customException = assertThrows(CustomException.class, () -> {
-            userService.registerUser(userRequestDto);
+            userService.registerUser(userSignupRequestDto);
         });
 
         //then
@@ -302,7 +302,7 @@ class UserServiceTest {
     @Test
     void 비밀번호_범위작음() {
         //given
-        UserRequestDto userRequestDto = new UserRequestDto(
+        UserSignupRequestDto userSignupRequestDto = new UserSignupRequestDto(
                 "test1234",
                 "비밀",
                 "1q2w!",
@@ -312,7 +312,7 @@ class UserServiceTest {
 
         //when
         CustomException customException = assertThrows(CustomException.class, () -> {
-            userService.registerUser(userRequestDto);
+            userService.registerUser(userSignupRequestDto);
         });
 
         //then
@@ -322,7 +322,7 @@ class UserServiceTest {
     @Test
     void 비밀번호_확인_불일치() {
         //given
-        UserRequestDto userRequestDto = new UserRequestDto(
+        UserSignupRequestDto userSignupRequestDto = new UserSignupRequestDto(
                 "test1234",
                 "비밀",
                 "1q2w3e4r!",
@@ -332,7 +332,7 @@ class UserServiceTest {
 
         //when
         CustomException customException = assertThrows(CustomException.class, () -> {
-            userService.registerUser(userRequestDto);
+            userService.registerUser(userSignupRequestDto);
         });
 
         //then
@@ -342,7 +342,7 @@ class UserServiceTest {
     @Test
     void 비밀번호_확인_없음() {
         //given
-        UserRequestDto userRequestDto = new UserRequestDto(
+        UserSignupRequestDto userSignupRequestDto = new UserSignupRequestDto(
                 "test1234",
                 "비밀",
                 "1q2w3e4r!",
@@ -352,7 +352,7 @@ class UserServiceTest {
 
         //when
         CustomException customException = assertThrows(CustomException.class, () -> {
-            userService.registerUser(userRequestDto);
+            userService.registerUser(userSignupRequestDto);
         });
 
         //then
