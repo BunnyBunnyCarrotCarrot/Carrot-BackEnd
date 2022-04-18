@@ -17,13 +17,14 @@ import java.util.List;
 public class ItemResponseDto {
     private String title;
     private int price;
-    private List<String> imageUrl;
+    private List<String> imageUrls;
     private Category category;
 
-    public ItemResponseDto(Item item, List<String> imageUrl){
+
+    public ItemResponseDto(Item item, List<String> imageUrls){
         this.title = item.getTitle();
         this.price = item.getPrice();
-        this.imageUrl = imageUrl;
+        this.imageUrls = imageUrls;
         this.category = item.getCategory();
     }
 }

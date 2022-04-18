@@ -21,6 +21,9 @@ public class User extends timestamped {
     private String userId;
 
     @Column(nullable = false)
+    private String userName;
+
+    @Column(nullable = false)
     private String userPw;
 
     @ManyToOne
@@ -28,8 +31,9 @@ public class User extends timestamped {
     private Location location;
 
 
-    public User(String userId, String userPw, Location location){
+    public User(String userId, String userName, String userPw, Location location){
         this.userId = userId;
+        this.userName = userName;
         this.userPw = userPw;
         this.location = location;
     }

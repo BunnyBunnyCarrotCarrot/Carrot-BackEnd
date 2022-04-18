@@ -1,8 +1,11 @@
 package com.carrot.hanghae.controller;
 
 import com.carrot.hanghae.domain.ImageUrl;
+import com.carrot.hanghae.dto.CategoryDto;
 import com.carrot.hanghae.dto.ItemRequestDto;
 import com.carrot.hanghae.dto.ItemResponseDto;
+import com.carrot.hanghae.dto.UserItemResponseDto;
+import com.carrot.hanghae.repository.CategoryRepository;
 import com.carrot.hanghae.repository.ImageUrlRepository;
 import com.carrot.hanghae.repository.ItemRepository;
 import com.carrot.hanghae.service.ItemService;
@@ -20,6 +23,14 @@ public class ItemController {
     private final ItemService itemService;
     private final S3Service s3Service;
     private final ImageUrlRepository imageUrlRepository;
+    private final ItemRepository itemRepository;
+    private final CategoryRepository categoryRepository;
+
+    //게시글 작성 시 카테고리 조회
+    @GetMapping("/api/item")
+    public List<CategoryDto> findCategorys(){
+        return itemService.findCategorys();
+    }
 
     //게시글 작성
     @PostMapping("/api/item")
@@ -32,6 +43,18 @@ public class ItemController {
         return itemService.registerItem(itemDto, imagePaths);   //userDetails.getUser()
     }
 
+//    //게시글 작성
+//    @PostMapping("/api/item")
+//    public List<String> createItem(
+//            @RequestPart List<MultipartFile> files                // , @AuthenticationPrincipal UserDetailsImpl userDetails
+//    ) {
+//        List<String> imagePaths = s3Service.upload(files);
+//        System.out.println("Image경로들 모아놓은것 :"+ imagePaths);
+//        return itemService.registerItem(imagePaths);   //userDetails.getUser()
+//    }
+
+
+
     //게시글 수정
     @PutMapping("/api/item/{itemId}/update")
     public ItemResponseDto updateItem(
@@ -40,11 +63,25 @@ public class ItemController {
             @RequestPart List<MultipartFile> files
     ) {
         List<ImageUrl> lastImages = imageUrlRepository.findByItemId(itemId);
+        System.out.println("삭제할 이전 경로들 : " +lastImages);
         List<String> imagePaths = s3Service.update(files, lastImages);
         System.out.println("Image경로들 모아놓은것 :"+ imagePaths);
-        System.out.println("여기나와?"+ itemDto);
         return itemService.updateItem(itemId, itemDto, imagePaths);
     }
-}
 
+    //게시글 삭제
+    @DeleteMapping("/api/item/{itemId}")
+    public Long deleteItem(@PathVariable Long itemId){
+        imageUrlRepository.deleteAllByItemId(itemId);
+        itemRepository.deleteById(itemId);
+        System.out.println("삭제가 되었어요~~");
+        return itemId;
+    }
+
+    //게시글 상세페이지 조회
+    @GetMapping("/api/item/{itemId}/details")
+    public UserItemResponseDto getUserItem(@PathVariable Long itemId) {    // , @AuthenticationPrincipal UserDetailsImpl userDetails
+        return itemService.getUserItem(itemId);    //userDetails.getUser()
+    }
+}
 

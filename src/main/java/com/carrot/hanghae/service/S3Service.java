@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 @Service
@@ -39,7 +40,7 @@ public class S3Service {
     @Value("${cloud.aws.region.static}")
     private String region;
 
-    private final String bucket = "bucketlist5";
+    private final String bucket = "***";
 
     private final ImageUrlRepository imageUrlRepository;
 
@@ -77,35 +78,24 @@ public class S3Service {
 
     // 글 수정 시 기존 s3에 있는 이미지 정보 삭제
     public List<String> update(List<MultipartFile> files, List<ImageUrl> lastImages) {
+        delete(lastImages);
+        return upload(files);
+    }
 
-//        Long lastImageId = lastImages.get(0).getId();
-//        imageUrlRepository.deleteById(lastImageId);
-
+    //기존 이미지 삭제
+    public void delete(List<ImageUrl> lastImages){
         for(ImageUrl lastImage : lastImages){
-            if (!"".equals(lastImage.getImageUrl()) && lastImage.getImageUrl() != null) {
-                boolean isExistObject = s3Client.doesObjectExist(bucket, lastImage.getImageUrl());
+            System.out.println("지워야할 url 주소" +lastImage.getImageUrls());
+            if (!"".equals(lastImage.getImageUrls()) && lastImage.getImageUrls() != null) {
+                boolean isExistObject = s3Client.doesObjectExist(bucket, lastImage.getImageUrls());
+                System.out.println("지워야할 url 주소" +lastImage.getImageUrls());
+                System.out.println("isExistObject : " +isExistObject);
                 if (isExistObject) {
-                    s3Client.deleteObject(bucket, lastImage.getImageUrl());
+                    s3Client.deleteObject(bucket, lastImage.getImageUrls());
                 }
             }
             imageUrlRepository.deleteById(lastImage.getId());
         }
-
-        //        for(MultipartFile file : files){
-//            String fileName = createFileName(file.getOriginalFilename());
-//            ObjectMetadata objectMetadata = new ObjectMetadata();
-//            objectMetadata.setContentLength(file.getSize());
-//            objectMetadata.setContentType(file.getContentType());
-//
-//            try(InputStream inputStream = file.getInputStream()) {
-//                s3Client.putObject(new PutObjectRequest(bucket,fileName,inputStream,objectMetadata)
-//                        .withCannedAcl(CannedAccessControlList.PublicRead));
-//                imageUrls.add(s3Client.getUrl(bucket, fileName).toString());
-//            }catch (IOException e){
-//                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,"파일 업로드에 실패하셨습니다");
-//            }
-//        }
-        return upload(files);
     }
 
 
@@ -122,6 +112,5 @@ public class S3Service {
         } catch (StringIndexOutOfBoundsException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "잘못된 형식의 파일(" + fileName + ") 입니다.");
         }
-
     }
 }
