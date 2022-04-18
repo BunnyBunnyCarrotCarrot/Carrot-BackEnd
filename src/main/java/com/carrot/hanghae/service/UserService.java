@@ -28,7 +28,7 @@ public class UserService {
         String inputPw = requestDto.getUserPw();
         String inputPw2 = requestDto.getUserPwCheck();
         Long locationId = requestDto.getUserLocation();
-
+        String imgUrl = "https://bucketlist5.s3.ap-northeast-2.amazonaws.com/당근이.png";
         //아이디 닉네임 비밀번호 유효성 검사
         checkUserId(userId);
 
@@ -45,7 +45,7 @@ public class UserService {
 
         String userPw = passwordEncoder.encode(requestDto.getUserPw());
 
-        User user = new User(userId, userPw, userName, location);
+        User user = new User(userId, userPw, userName, location, imgUrl);
 
         userRepository.save(user);
     }
