@@ -88,36 +88,6 @@ public class ItemService {
         return new ItemResponseDto(title, price, images, category);
     }
 
-//    @Transactional
-//    public List<String> registerItem(List<String> imageUrls) { //User user
-//        //user 임의 생성(test 끝나면 지우기!!!!)
-//        User user = userRepository.findById(1L).orElseThrow(
-//                () -> new IllegalArgumentException("해당 유저가 없어용!!")
-//        );
-//
-//        Category category = categoryRepository.findById(1L).orElseThrow(
-//                () -> new IllegalArgumentException("해당 카테고리가 DB에 존재하지 않습니다.")
-//        );
-//
-//        //item 저장하기
-//        Item item = new Item("제목", 1000, "상세설명", user, category);
-//        itemRepository.save(item);
-//
-//        //이미지 URL 저장하기
-//        List<String> images = new ArrayList<>(); //return 값 보려구요~
-//        for(String imageUrl : imageUrls){
-//            ImageUrl image = new ImageUrl(imageUrl, item);
-//            imageUrlRepository.save(image);
-//            images.add(image.getImageUrls());
-//        }
-//
-//        //return 값 생성
-//        return images;
-//    }
-
-
-
-
     //게시글 수정
     public ItemResponseDto updateItem(Long itemId, ItemRequestDto itemDto, List<String> imageUrls) {
         Item item = itemRepository.findById(itemId)

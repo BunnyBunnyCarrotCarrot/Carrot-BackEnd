@@ -40,7 +40,7 @@ public class S3Service {
     @Value("${cloud.aws.region.static}")
     private String region;
 
-    private final String bucket = "***";
+    private final String bucket = "bucketlist5";
 
     private final ImageUrlRepository imageUrlRepository;
 
@@ -85,13 +85,15 @@ public class S3Service {
     //기존 이미지 삭제
     public void delete(List<ImageUrl> lastImages){
         for(ImageUrl lastImage : lastImages){
-            System.out.println("지워야할 url 주소" +lastImage.getImageUrls());
             if (!"".equals(lastImage.getImageUrls()) && lastImage.getImageUrls() != null) {
-                boolean isExistObject = s3Client.doesObjectExist(bucket, lastImage.getImageUrls());
-                System.out.println("지워야할 url 주소" +lastImage.getImageUrls());
+                String lastImageUrl = lastImage.getImageUrls();
+                lastImageUrl = lastImageUrl.replace("https://bucketlist5.s3.ap-northeast-2.amazonaws.com/", "");
+                boolean isExistObject = s3Client.doesObjectExist(bucket, lastImageUrl);
+                System.out.println("지워야할 url 주소 : " +lastImage.getImageUrls());
+                System.out.println("앞에 지운 url 주소 : " + lastImageUrl);
                 System.out.println("isExistObject : " +isExistObject);
                 if (isExistObject) {
-                    s3Client.deleteObject(bucket, lastImage.getImageUrls());
+                    s3Client.deleteObject(bucket, lastImageUrl);
                 }
             }
             imageUrlRepository.deleteById(lastImage.getId());

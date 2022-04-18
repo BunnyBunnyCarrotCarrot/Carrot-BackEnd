@@ -43,18 +43,6 @@ public class ItemController {
         return itemService.registerItem(itemDto, imagePaths);   //userDetails.getUser()
     }
 
-//    //게시글 작성
-//    @PostMapping("/api/item")
-//    public List<String> createItem(
-//            @RequestPart List<MultipartFile> files                // , @AuthenticationPrincipal UserDetailsImpl userDetails
-//    ) {
-//        List<String> imagePaths = s3Service.upload(files);
-//        System.out.println("Image경로들 모아놓은것 :"+ imagePaths);
-//        return itemService.registerItem(imagePaths);   //userDetails.getUser()
-//    }
-
-
-
     //게시글 수정
     @PutMapping("/api/item/{itemId}/update")
     public ItemResponseDto updateItem(
