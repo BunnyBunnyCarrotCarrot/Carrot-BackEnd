@@ -1,6 +1,5 @@
 package com.carrot.hanghae.domain;
 
-
 import com.carrot.hanghae.dto.ItemRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
