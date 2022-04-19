@@ -1,6 +1,5 @@
 package com.carrot.hanghae.domain;
 
-
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -11,12 +10,13 @@ import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
 
 @Getter
-@MappedSuperclass //Entity가 자동으로 컬럼으로 인식
-@EntityListeners(AuditingEntityListener.class) //생성, 변경시간을 자동으로 업데이트
-public class timestamped {
-    @CreatedDate
-    private LocalDateTime createAt;
+@MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)
+public abstract class Timestamped {
 
-    @LastModifiedDate
+    @CreatedDate // 생성일자임을 나타냅니다.
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate // 마지막 수정일자임을 나타냅니다.
     private LocalDateTime modifiedAt;
 }
