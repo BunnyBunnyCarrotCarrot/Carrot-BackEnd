@@ -4,6 +4,8 @@ import com.carrot.hanghae.dto.ItemRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
+
 import javax.persistence.*;
 import java.util.Optional;
 
@@ -11,7 +13,7 @@ import java.util.Optional;
 @Setter
 @NoArgsConstructor
 @Entity
-public class Item extends timestamped {
+public class Item extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
@@ -33,7 +35,8 @@ public class Item extends timestamped {
     @JoinColumn(name="CATEGORY_ID", nullable = false)
     private Category category;
 
-
+    @Column
+    private Boolean status=false;
 
     public Item(String title, int price, String about, User user, Category category){
         this.title = title;

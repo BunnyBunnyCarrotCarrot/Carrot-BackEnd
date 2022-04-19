@@ -43,7 +43,7 @@ public class S3Service {
     @Value("${cloud.aws.region.static}")
     private String region;
 
-    private final String bucket = "bucketlist5";
+    private final String bucket = "hbkimtest";
 
     private final ImageUrlRepository imageUrlRepository;
     private final ItemRepository itemRepository;
@@ -101,7 +101,7 @@ public class S3Service {
             for(ImageUrl lastImage : lastImages){
                 if (!"".equals(lastImage.getImageUrls()) && lastImage.getImageUrls() != null) {
                     String lastImageUrl = lastImage.getImageUrls();
-                    lastImageUrl = lastImageUrl.replace("https://bucketlist5.s3.ap-northeast-2.amazonaws.com/", "");
+                    lastImageUrl = lastImageUrl.replace("https://hbkimtest.s3.ap-northeast-2.amazonaws.com/", "");
                     boolean isExistObject = s3Client.doesObjectExist(bucket, lastImageUrl);
                     System.out.println("지워야할 url 주소 : " +lastImage.getImageUrls());
                     System.out.println("앞에 지운 url 주소 : " + lastImageUrl);
@@ -152,8 +152,8 @@ public class S3Service {
 
     //기존 이미지 삭제
     public void deleteOne(String lastImage){
-        if(!lastImage.equals("https://bucketlist5.s3.ap-northeast-2.amazonaws.com/당근이.png")){
-            lastImage = lastImage.replace("https://bucketlist5.s3.ap-northeast-2.amazonaws.com/", "");
+        if(!lastImage.equals("https://hbkimtest.s3.ap-northeast-2.amazonaws.com/당근이.png")){
+            lastImage = lastImage.replace("https://hbkimtest.s3.ap-northeast-2.amazonaws.com/", "");
             boolean isExistObject = s3Client.doesObjectExist(bucket, lastImage);
             System.out.println("지워야할 url 주소 : " +lastImage);
             System.out.println("isExistObject : " +isExistObject);
