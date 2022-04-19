@@ -24,6 +24,9 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -125,6 +128,38 @@ public class S3Service {
             return fileName.substring(fileName.lastIndexOf("."));
         } catch (StringIndexOutOfBoundsException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "잘못된 형식의 파일(" + fileName + ") 입니다.");
+        }
+    }
+
+    public String uploadOne(MultipartFile file) {
+        String fileName = createFileName(file.getOriginalFilename());
+        String imgUrl = "";
+        ObjectMetadata objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentLength(file.getSize());
+        objectMetadata.setContentType(file.getContentType());
+
+        try(InputStream inputStream = file.getInputStream()) {
+            s3Client.putObject(new PutObjectRequest(bucket,fileName,inputStream,objectMetadata)
+                    .withCannedAcl(CannedAccessControlList.PublicRead));
+            imgUrl = s3Client.getUrl(bucket, fileName).toString();
+        }catch (IOException e){
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,"파일 업로드에 실패하셨습니다");
+        }
+
+        return imgUrl;
+    }
+
+
+    //기존 이미지 삭제
+    public void deleteOne(String lastImage){
+        if(!lastImage.equals("https://bucketlist5.s3.ap-northeast-2.amazonaws.com/당근이.png")){
+            lastImage = lastImage.replace("https://bucketlist5.s3.ap-northeast-2.amazonaws.com/", "");
+            boolean isExistObject = s3Client.doesObjectExist(bucket, lastImage);
+            System.out.println("지워야할 url 주소 : " +lastImage);
+            System.out.println("isExistObject : " +isExistObject);
+            if (isExistObject) {
+                s3Client.deleteObject(bucket, lastImage);
+            }
         }
     }
 }

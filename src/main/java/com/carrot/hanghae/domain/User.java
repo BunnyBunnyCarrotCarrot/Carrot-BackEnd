@@ -1,45 +1,48 @@
 package com.carrot.hanghae.domain;
 
-import lombok.AllArgsConstructor;
+import com.carrot.hanghae.dto.UserSignupRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.mapping.ToOne;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Getter
-@Setter
 @NoArgsConstructor
-@AllArgsConstructor
+@Setter
 @Entity
-public class User extends timestamped {
+public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String userId;
-
-    @Column(nullable = false)
-    private String userName;
 
     @Column(nullable = false)
     private String userPw;
 
+    @Column(nullable = false)
+    private String userName;
+
+    @ManyToOne
+    @JoinColumn
+    private Location location;
+
     @Column
     private String imgUrl;
 
-    @ManyToOne
-    @JoinColumn(name="LOCATION_ID")
-    private Location location;
-
-
-    public User(String userId, String userName, String userPw, Location location){
+    public User (String userId, String userPw, String userName, Location location, String imgUrl){
         this.userId = userId;
-        this.userName = userName;
         this.userPw = userPw;
+        this.userName = userName;
         this.location = location;
+        this.imgUrl = imgUrl;
+    }
+
+    public void update(Location location, String imgUrl) {
+        this.location = location;
+        this.imgUrl = imgUrl;
     }
 }

@@ -1,12 +1,8 @@
 package com.carrot.hanghae.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -18,6 +14,6 @@ public class Location {
     @Column(nullable = false, unique = true)
     private Long id;
 
-    @Column
+    @Column(nullable = false)
     private String name;
 }

@@ -10,7 +10,6 @@ import java.util.TimeZone;
 @EnableJpaAuditing
 @SpringBootApplication
 public class HanghaeApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(HanghaeApplication.class, args);
     }
