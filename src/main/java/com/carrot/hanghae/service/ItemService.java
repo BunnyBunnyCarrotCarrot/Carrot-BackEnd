@@ -42,7 +42,7 @@ public class ItemService {
 
     //게시글 작성
     @Transactional
-    public ItemResponseDto registerItem(ItemRequestDto ItemDto, List<String> imageUrls) { //User user
+    public ItemResponseDto registerItem(ItemRequestDto ItemDto, List<String> imageUrls, User user) {
 
         String title = ItemDto.getTitle();
         int price = ItemDto.getPrice();
@@ -67,17 +67,12 @@ public class ItemService {
             throw new IllegalArgumentException("상세 설명을 넣어주세요.");
         }
 
-        //user 임의 생성(test 끝나면 지우기!!!!)
-        User user = userRepository.findById(1L).orElseThrow(
-                () -> new IllegalArgumentException("해당 유저가 없어용!!")
-        );
-
         Item item = new Item(title, price, about, user, category);
         itemRepository.save(item);
 
 
         //이미지 URL 저장하기
-        List<String> images = new ArrayList<>(); //return 값 보려구요~
+        List<String> images = new ArrayList<>(); //return 값 확인
         for(String imageUrl : imageUrls){
             ImageUrl image = new ImageUrl(imageUrl, item);
             imageUrlRepository.save(image);
@@ -108,7 +103,7 @@ public class ItemService {
     }
 
     //게시글 상세페이지 조회
-    public UserItemResponseDto getUserItem(Long itemId) {  //User user
+    public UserItemResponseDto getUserItem(Long itemId, User user) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(()-> new IllegalArgumentException("해당하는 게시글이 없습니다."));
         List<ImageUrl> imageUrls = imageUrlRepository.findByItemId(itemId);
@@ -117,12 +112,6 @@ public class ItemService {
             images.add(imageUrl.getImageUrls());
         }
         Category category = item.getCategory();
-
-        //user 임의 생성(test 끝나면 지우기!!!!)
-        User user = userRepository.findById(1L).orElseThrow(
-                () -> new IllegalArgumentException("해당 유저가 없어용!!")
-        );
-
 
         //좋아요 완성되면 넣기
         Random rand = new Random();
