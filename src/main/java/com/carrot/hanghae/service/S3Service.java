@@ -9,9 +9,11 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.carrot.hanghae.domain.ImageUrl;
+import com.carrot.hanghae.domain.Item;
+import com.carrot.hanghae.domain.User;
 import com.carrot.hanghae.repository.ImageUrlRepository;
+import com.carrot.hanghae.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -43,6 +46,7 @@ public class S3Service {
     private final String bucket = "bucketlist5";
 
     private final ImageUrlRepository imageUrlRepository;
+    private final ItemRepository itemRepository;
 
     @PostConstruct
     public void setS3Client() {
@@ -76,27 +80,38 @@ public class S3Service {
     }
 
 
-    // 글 수정 시 기존 s3에 있는 이미지 정보 삭제
-    public List<String> update(List<MultipartFile> files, List<ImageUrl> lastImages) {
-        delete(lastImages);
+    // 글 수정(기존 s3에 있는 이미지 정보 삭제)
+    public List<String> update(List<MultipartFile> files, User user, Long itemId) {
+        delete(user, itemId);
         return upload(files);
     }
 
-    //기존 이미지 삭제
-    public void delete(List<ImageUrl> lastImages){
-        for(ImageUrl lastImage : lastImages){
-            if (!"".equals(lastImage.getImageUrls()) && lastImage.getImageUrls() != null) {
-                String lastImageUrl = lastImage.getImageUrls();
-                lastImageUrl = lastImageUrl.replace("https://bucketlist5.s3.ap-northeast-2.amazonaws.com/", "");
-                boolean isExistObject = s3Client.doesObjectExist(bucket, lastImageUrl);
-                System.out.println("지워야할 url 주소 : " +lastImage.getImageUrls());
-                System.out.println("앞에 지운 url 주소 : " + lastImageUrl);
-                System.out.println("isExistObject : " +isExistObject);
-                if (isExistObject) {
-                    s3Client.deleteObject(bucket, lastImageUrl);
+    //기존 s3에 있는 기존 이미지 정보 삭제
+    public void delete(User user, Long itemId){
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new IllegalStateException("해당 게시글이 없습니다."));
+        Long userId = item.getId();
+        System.out.println("해당유저아이디 : "+ userId);
+        if (!user.getId().equals(userId)){
+            throw new IllegalArgumentException("작성자가 아니므로, 해당 게시글에 대한 권한이 없습니다.");
+        } else if(Objects.equals(user.getId(), userId)){
+            List<ImageUrl> lastImages = imageUrlRepository.findByItemId(itemId);
+            System.out.println("삭제할 이전 경로들 : " +lastImages);
+
+            for(ImageUrl lastImage : lastImages){
+                if (!"".equals(lastImage.getImageUrls()) && lastImage.getImageUrls() != null) {
+                    String lastImageUrl = lastImage.getImageUrls();
+                    lastImageUrl = lastImageUrl.replace("https://bucketlist5.s3.ap-northeast-2.amazonaws.com/", "");
+                    boolean isExistObject = s3Client.doesObjectExist(bucket, lastImageUrl);
+                    System.out.println("지워야할 url 주소 : " +lastImage.getImageUrls());
+                    System.out.println("앞에 지운 url 주소 : " + lastImageUrl);
+                    System.out.println("isExistObject : " +isExistObject);
+                    if (isExistObject) {
+                        s3Client.deleteObject(bucket, lastImageUrl);
+                    }
                 }
+                imageUrlRepository.deleteById(lastImage.getId());
             }
-            imageUrlRepository.deleteById(lastImage.getId());
         }
     }
 

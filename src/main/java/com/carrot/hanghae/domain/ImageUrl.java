@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Entity
-public class ImageUrl extends Timestamped {
+public class ImageUrl extends timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
@@ -27,10 +27,5 @@ public class ImageUrl extends Timestamped {
     public ImageUrl(String imageUrls, Item item){
         this.imageUrls = imageUrls;
         this.item = item;
-    }
-
-    //실험성공 시 지우기
-    public ImageUrl(String imageUrls){
-        this.imageUrls = imageUrls;
     }
 }

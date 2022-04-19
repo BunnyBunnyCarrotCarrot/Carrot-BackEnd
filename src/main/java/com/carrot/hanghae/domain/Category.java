@@ -5,15 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Getter
-@NoArgsConstructor
 @Setter
-@Entity
+@NoArgsConstructor
 @AllArgsConstructor
+@Entity
 public class Category {
     @Id
     @Column(nullable = false, unique = true)
@@ -21,4 +19,11 @@ public class Category {
 
     @Column(nullable = false)
     private String name;
+
+//    @OneToMany(mappedBy = "category")
+//    private List<Item> item;
+
+    public Category(String name){
+        this.name = name;
+    }
 }
