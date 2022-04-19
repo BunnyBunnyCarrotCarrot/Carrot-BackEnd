@@ -1,9 +1,8 @@
 package com.carrot.hanghae.controller;
 
 import com.carrot.hanghae.domain.Location;
-import com.carrot.hanghae.dto.UserDetailDto;
-import com.carrot.hanghae.dto.UserSignupRequestDto;
 import com.carrot.hanghae.dto.UserResponseDto;
+import com.carrot.hanghae.dto.UserSignupRequestDto;
 import com.carrot.hanghae.repository.LocationRepository;
 import com.carrot.hanghae.security.UserDetailsImpl;
 import com.carrot.hanghae.service.S3Service;

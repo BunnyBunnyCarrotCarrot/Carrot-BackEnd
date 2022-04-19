@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -25,6 +26,7 @@ public class UserItemResponseDto {
     private String categoryName;
     private int likeCount;
     private boolean likeState;
+    private LocalDateTime modefiedAt;
 
 
     public UserItemResponseDto(Item item, User user, List<String> imageUrls, int likeCount, boolean likeState, Category category){
@@ -38,6 +40,7 @@ public class UserItemResponseDto {
         this.likeState = likeState;
         this.categoryId = category.getId();
         this.categoryName = category.getName();
+        this.modefiedAt = item.getModifiedAt();
     }
 }
 

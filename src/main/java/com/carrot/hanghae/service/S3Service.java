@@ -11,6 +11,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.carrot.hanghae.domain.ImageUrl;
 import com.carrot.hanghae.domain.Item;
 import com.carrot.hanghae.domain.User;
+import com.carrot.hanghae.repository.CategoryRepository;
 import com.carrot.hanghae.repository.ImageUrlRepository;
 import com.carrot.hanghae.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +47,6 @@ public class S3Service {
     private final String bucket = "hbkimtest";
 
     private final ImageUrlRepository imageUrlRepository;
-    private final ItemRepository itemRepository;
 
     @PostConstruct
     public void setS3Client() {
@@ -60,6 +60,7 @@ public class S3Service {
 
     // 최초 게시글 작성
     public List<String> upload(List<MultipartFile> files){
+
         List<String> imageUrls = new ArrayList<>();
 
         for(MultipartFile file : files){
@@ -80,21 +81,15 @@ public class S3Service {
     }
 
 
-    // 글 수정(기존 s3에 있는 이미지 정보 삭제)
-    public List<String> update(List<MultipartFile> files, User user, Long itemId) {
-        delete(user, itemId);
+    // 글 수정(+ 기존 s3에 있는 이미지 정보 삭제)
+    public List<String> update(Long itemId, List<MultipartFile> files) {
+        //이미지 삭제 후 재업로드
+        delete(itemId);
         return upload(files);
     }
 
     //기존 s3에 있는 기존 이미지 정보 삭제
-    public void delete(User user, Long itemId){
-        Item item = itemRepository.findById(itemId)
-                .orElseThrow(() -> new IllegalStateException("해당 게시글이 없습니다."));
-        Long userId = item.getId();
-        System.out.println("해당유저아이디 : "+ userId);
-        if (!user.getId().equals(userId)){
-            throw new IllegalArgumentException("작성자가 아니므로, 해당 게시글에 대한 권한이 없습니다.");
-        } else if(Objects.equals(user.getId(), userId)){
+    public void delete(Long itemId){
             List<ImageUrl> lastImages = imageUrlRepository.findByItemId(itemId);
             System.out.println("삭제할 이전 경로들 : " +lastImages);
 
@@ -113,7 +108,7 @@ public class S3Service {
                 imageUrlRepository.deleteById(lastImage.getId());
             }
         }
-    }
+
 
 
     private String createFileName(String fileName) {
