@@ -2,7 +2,8 @@ package com.carrot.hanghae.service;
 
 import com.carrot.hanghae.domain.Location;
 import com.carrot.hanghae.domain.User;
-import com.carrot.hanghae.dto.UserRequestDto;
+import com.carrot.hanghae.dto.UserDetailDto;
+import com.carrot.hanghae.dto.UserSignupRequestDto;
 import com.carrot.hanghae.exception.CustomException;
 import com.carrot.hanghae.exception.ErrorCode;
 import com.carrot.hanghae.repository.LocationRepository;
@@ -21,14 +22,15 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final LocationRepository locationRepository;
+    private final S3Service s3Service;
 
-    public void registerUser(UserRequestDto requestDto) throws IllegalArgumentException {
+    public void registerUser(UserSignupRequestDto requestDto) throws IllegalArgumentException {
         String userId = requestDto.getUserId();
         String userName = requestDto.getUserName();
         String inputPw = requestDto.getUserPw();
         String inputPw2 = requestDto.getUserPwCheck();
         Long locationId = requestDto.getUserLocation();
-
+        String imgUrl = "https://bucketlist5.s3.ap-northeast-2.amazonaws.com/당근이.png";
         //아이디 닉네임 비밀번호 유효성 검사
         checkUserId(userId);
 
@@ -45,7 +47,7 @@ public class UserService {
 
         String userPw = passwordEncoder.encode(requestDto.getUserPw());
 
-        User user = new User(userId, userPw, userName, location);
+        User user = new User(userId, userPw, userName, location, imgUrl);
 
         userRepository.save(user);
     }
@@ -100,4 +102,17 @@ public class UserService {
         }
     }
 
+    public void updateUser(Long locationId, String imagePath, Long userId) {
+        Location location = locationRepository.findById(locationId).orElseThrow(
+                () -> new CustomException(ErrorCode.NOT_FOUND_LOCATION_ID)
+        );
+
+        User user = userRepository.findById(userId).orElseThrow(
+                ()-> new CustomException(ErrorCode.NOT_FOUND_USER_ID)
+        );
+        String lastImageUrl = user.getImgUrl();
+        s3Service.deleteOne(lastImageUrl);
+        user.update(location, imagePath);
+        userRepository.save(user);
+    }
 }

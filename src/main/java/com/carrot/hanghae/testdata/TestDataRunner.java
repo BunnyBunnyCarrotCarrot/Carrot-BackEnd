@@ -2,7 +2,6 @@ package com.carrot.hanghae.testdata;
 
 
 import com.carrot.hanghae.domain.Location;
-import com.carrot.hanghae.domain.User;
 import com.carrot.hanghae.repository.LocationRepository;
 import com.carrot.hanghae.repository.UserRepository;
 import com.carrot.hanghae.service.UserService;
