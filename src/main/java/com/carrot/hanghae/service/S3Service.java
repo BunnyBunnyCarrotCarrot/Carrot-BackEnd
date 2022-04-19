@@ -96,7 +96,7 @@ public class S3Service {
             for(ImageUrl lastImage : lastImages){
                 if (!"".equals(lastImage.getImageUrls()) && lastImage.getImageUrls() != null) {
                     String lastImageUrl = lastImage.getImageUrls();
-                    lastImageUrl = lastImageUrl.replace("https://bucketlist5.s3.ap-northeast-2.amazonaws.com/", "");
+                    lastImageUrl = lastImageUrl.replace("https://hbkimtest.s3.ap-northeast-2.amazonaws.com/", "");
                     boolean isExistObject = s3Client.doesObjectExist(bucket, lastImageUrl);
                     System.out.println("지워야할 url 주소 : " +lastImage.getImageUrls());
                     System.out.println("앞에 지운 url 주소 : " + lastImageUrl);
