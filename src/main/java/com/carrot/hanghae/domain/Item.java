@@ -11,7 +11,7 @@ import java.util.Optional;
 @Setter
 @NoArgsConstructor
 @Entity
-public class Item extends timestamped {
+public class Item extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
