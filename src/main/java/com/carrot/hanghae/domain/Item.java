@@ -29,7 +29,7 @@ public class Item extends Timestamped {
     @JoinColumn(name="USER_ID", nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne //(fetch = FetchType.LAZY)
     @JoinColumn(name="CATEGORY_ID", nullable = false)
     private Category category;
 

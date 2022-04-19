@@ -11,9 +11,10 @@ import com.carrot.hanghae.dto.UserItemResponseDto;
 import com.carrot.hanghae.repository.CategoryRepository;
 import com.carrot.hanghae.repository.ImageUrlRepository;
 import com.carrot.hanghae.repository.ItemRepository;
-import com.carrot.hanghae.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,12 +26,12 @@ import java.util.Random;
 public class ItemService {
 
     private final ItemRepository itemRepository;
-    private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
     private final ImageUrlRepository imageUrlRepository;
+    private final S3Service s3Service;
 
     //카테고리 조회
-    public List<CategoryDto> findCategorys() {
+    public List<CategoryDto> findCategories() {
         List<Category> categories = categoryRepository.findAll();
         List<CategoryDto> allCategories = new ArrayList<>();
         for (Category category : categories) {
@@ -42,38 +43,32 @@ public class ItemService {
 
     //게시글 작성
     @Transactional
-    public ItemResponseDto registerItem(ItemRequestDto ItemDto, List<String> imageUrls, User user) {
+    public ItemResponseDto registerItem(ItemRequestDto itemDto, List<MultipartFile> files, User user) {
 
-        String title = ItemDto.getTitle();
-        int price = ItemDto.getPrice();
-        String about = ItemDto.getAbout();
-        Long categoryId = ItemDto.getCategoryId();
-
-        Category category = categoryRepository.findById(categoryId).orElseThrow(
-                () -> new IllegalArgumentException("해당 카테고리가 DB에 존재하지 않습니다.")
-        );
-
-        //잘 들어왔는지 콘솔에서 확인!!!!!(마지막에 지우쟈!)
-        System.out.println("title : "+ title);
-        System.out.println("price : "+ price);
-        System.out.println("about : "+ about);
-        System.out.println("category : "+ category);
-
-        if (title == null) {
+        String title = itemDto.getTitle();
+        int price = itemDto.getPrice();
+        String about = itemDto.getAbout();
+        Long categoryId = itemDto.getCategoryId();
+        Category category = categoryRepository.findById(categoryId)
+        //유효성검사
+                .orElseThrow( () -> new IllegalArgumentException("해당 카테고리가 없습니다!"));
+         if (title == null) {
             throw new IllegalArgumentException("내용을 적어주세요.");
         } else if (price < 0) {
             throw new IllegalArgumentException("0원 이상의 가격을 넣어주세요.");
         } else if (about == null) {
             throw new IllegalArgumentException("상세 설명을 넣어주세요.");
         }
-
+        //item 저장
         Item item = new Item(title, price, about, user, category);
         itemRepository.save(item);
 
-
         //이미지 URL 저장하기
+        List<String> imagePaths = s3Service.upload(files);
+        System.out.println("최초 게시하는 Image경로들 모아놓은것 :"+ imagePaths);
+
         List<String> images = new ArrayList<>(); //return 값 확인
-        for(String imageUrl : imageUrls){
+        for(String imageUrl : imagePaths){
             ImageUrl image = new ImageUrl(imageUrl, item);
             imageUrlRepository.save(image);
             images.add(image.getImageUrls());
@@ -83,18 +78,36 @@ public class ItemService {
     }
 
     //게시글 수정
-    public ItemResponseDto updateItem(Long itemId, ItemRequestDto itemDto, List<String> imageUrls) {
+    public ItemResponseDto updateItem(Long itemId, ItemRequestDto itemDto, List<MultipartFile> files, User user) {
+        //item
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new IllegalStateException("해당 게시글이 없습니다."));
-        System.out.println(item);
+        //작성자 검사
+        Long itemUserId = item.getUser().getId();
+        System.out.println("itemUserId = " + itemUserId);
+        if (!user.getId().equals(itemUserId)){
+            throw new IllegalArgumentException("작성자가 아니므로, 해당 게시글을 수정할 수 없습니다.");
+        }
+        //카테고리
         Category category = categoryRepository.findById(itemDto.getCategoryId())
+        //유효성 검사
                 .orElseThrow(() -> new IllegalStateException("해당 카테고리가 없습니다."));
+        if (itemDto.getTitle() == null) {
+            throw new IllegalArgumentException("내용을 적어주세요.");
+        } else if (itemDto.getPrice() < 0) {
+            throw new IllegalArgumentException("0원 이상의 가격을 넣어주세요.");
+        } else if (itemDto.getAbout() == null) {
+            throw new IllegalArgumentException("상세 설명을 넣어주세요.");
+        }
+
+        List<String> imagePaths = s3Service.update(itemId, files);
+        System.out.println("수정된 Image경로들 모아놓은것 :"+ imagePaths);
+
         item.update(itemDto, category);
-        System.out.println(item);
 
         //이미지 URL 저장하기
-        List<String> images = new ArrayList<>(); //return 값 보려구요~
-        for(String imageUrl : imageUrls){
+        List<String> images = new ArrayList<>(); //return 값 확인
+        for(String imageUrl : imagePaths){
             ImageUrl image = new ImageUrl(imageUrl, item);
             imageUrlRepository.save(image);
             images.add(image.getImageUrls());
@@ -119,5 +132,24 @@ public class ItemService {
         boolean likeState = true;
 
         return new UserItemResponseDto(item, user, images, likeCount, likeState, category);
+    }
+
+    //item 삭제
+    public Long deleteItem(Long itemId, User user) {
+        //item 유효성 검사
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new IllegalStateException("해당 게시글이 없습니다."));
+        //작성자 검사
+        Long itemUserId = item.getUser().getId();
+        if (!user.getId().equals(itemUserId)){
+            throw new IllegalArgumentException("작성자가 아니므로, 해당 게시글을 삭제할 수 없습니다.");
+        }
+        //S3 사진, ImageURl, item 삭제
+        s3Service.delete(itemId);
+        imageUrlRepository.deleteAllByItemId(itemId);
+        itemRepository.deleteById(itemId);
+        System.out.println("삭제가 되었어요~~");
+
+        return itemId;
     }
 }

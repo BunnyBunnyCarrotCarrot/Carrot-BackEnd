@@ -23,15 +23,11 @@ import java.util.List;
 public class ItemController {
 
     private final ItemService itemService;
-    private final S3Service s3Service;
-    private final ImageUrlRepository imageUrlRepository;
-    private final ItemRepository itemRepository;
-    private final UserRepository userRepository;
 
     //게시글 작성 시 카테고리 조회
     @GetMapping("/api/item")
-    public List<CategoryDto> findCategorys(){
-        return itemService.findCategorys();
+    public List<CategoryDto> findCategories(){
+        return itemService.findCategories();
     }
 
     //게시글 작성
@@ -41,9 +37,7 @@ public class ItemController {
             @RequestPart List<MultipartFile> files,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        List<String> imagePaths = s3Service.upload(files);
-        System.out.println("Image경로들 모아놓은것 :"+ imagePaths);
-        return itemService.registerItem(itemDto, imagePaths, userDetails.getUser());
+        return itemService.registerItem(itemDto, files, userDetails.getUser());
     }
 
     //게시글 수정
@@ -54,19 +48,13 @@ public class ItemController {
             @RequestPart List<MultipartFile> files,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        List<String> imagePaths = s3Service.update(files, userDetails.getUser(), itemId);
-        System.out.println("Image경로들 모아놓은것 :"+ imagePaths);
-        return itemService.updateItem(itemId, itemDto, imagePaths);
+        return itemService.updateItem(itemId, itemDto, files, userDetails.getUser());
     }
 
     //게시글 삭제
     @DeleteMapping("/api/item/{itemId}")
     public Long deleteItem(@PathVariable Long itemId, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        s3Service.delete(userDetails.getUser(), itemId);
-        imageUrlRepository.deleteAllByItemId(itemId);
-        itemRepository.deleteById(itemId);
-        System.out.println("삭제가 되었어요~~");
-        return itemId;
+        return itemService.deleteItem(itemId, userDetails.getUser());
     }
 
     //게시글 상세페이지 조회
