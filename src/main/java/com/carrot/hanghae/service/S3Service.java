@@ -119,6 +119,7 @@ public class S3Service {
     private String getFileExtension(String fileName) {
         // file 형식이 잘못된 경우를 확인하기 위해 만들어진 로직이며,
         // 파일 타입과 상관없이 업로드할 수 있게 하기 위해 .의 존재 유무만 판단
+        System.out.println("파일이름알고싶어요!! : "+fileName.substring(fileName.lastIndexOf(".")));
         try {
             return fileName.substring(fileName.lastIndexOf("."));
         } catch (StringIndexOutOfBoundsException e) {

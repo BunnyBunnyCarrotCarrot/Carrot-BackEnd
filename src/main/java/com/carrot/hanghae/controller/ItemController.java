@@ -1,16 +1,11 @@
 package com.carrot.hanghae.controller;
 
-import com.carrot.hanghae.domain.User;
 import com.carrot.hanghae.dto.CategoryDto;
 import com.carrot.hanghae.dto.ItemRequestDto;
 import com.carrot.hanghae.dto.ItemResponseDto;
 import com.carrot.hanghae.dto.UserItemResponseDto;
-import com.carrot.hanghae.repository.ImageUrlRepository;
-import com.carrot.hanghae.repository.ItemRepository;
-import com.carrot.hanghae.repository.UserRepository;
 import com.carrot.hanghae.security.UserDetailsImpl;
 import com.carrot.hanghae.service.ItemService;
-import com.carrot.hanghae.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
