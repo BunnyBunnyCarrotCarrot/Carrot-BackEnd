@@ -31,10 +31,10 @@ public class ItemController {
     }
 
     //게시글 작성
-    @PostMapping("/api/item")
+    @RequestMapping(value = "/api/item", method = {RequestMethod.POST}, headers = ("content-type=multipart/*"))
     public ItemResponseDto createItem(
-            @RequestPart ItemRequestDto itemDto,
-            @RequestPart List<MultipartFile> files,
+            @RequestPart(value = "itemDto") ItemRequestDto itemDto,
+            @RequestPart(value = "files") List<MultipartFile> files,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
         return itemService.registerItem(itemDto, files, userDetails.getUser());
