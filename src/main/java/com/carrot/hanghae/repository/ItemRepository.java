@@ -14,6 +14,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     @Query ("select i from Item i " +
             "join User u on i.user.id = u.id " +
-            "where u.location = :location")
+            "where u.location = :location " +
+            "order by i.modifiedAt desc")
     List<Item> findAllInnerFetchJoin(Location location);
 }
