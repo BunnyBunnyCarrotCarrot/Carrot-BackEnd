@@ -1,5 +1,6 @@
 package com.carrot.hanghae.domain;
 
+import com.carrot.hanghae.dto.ImageUrlDto;
 import com.carrot.hanghae.dto.ItemRequestDto;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
@@ -8,6 +9,7 @@ import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,9 +39,8 @@ public class Item extends Timestamped {
     @JoinColumn(name="CATEGORY_ID", nullable = false)
     private Category category;
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "item")
-    private List<ImageUrl> imageUrls;
+    private List<ImageUrl> imageUrls = new ArrayList<>();
 
     @Column
     private Boolean status=false;
@@ -60,6 +61,7 @@ public class Item extends Timestamped {
     }
 
     public void addImage(ImageUrl imageUrl){
-        this.imageUrls.add(imageUrl);
+        imageUrls.add(imageUrl);
+
     }
 }

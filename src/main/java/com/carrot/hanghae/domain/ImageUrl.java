@@ -20,7 +20,6 @@ public class ImageUrl extends Timestamped {
     private String imageUrls;
 
     //@JsonIgnore
-    @JsonBackReference
     @ManyToOne //(fetch = FetchType.LAZY)
     @JoinColumn(name = "ITEM_ID", nullable = false)
     private Item item;

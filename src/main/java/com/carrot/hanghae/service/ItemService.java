@@ -4,10 +4,7 @@ import com.carrot.hanghae.domain.Category;
 import com.carrot.hanghae.domain.ImageUrl;
 import com.carrot.hanghae.domain.Item;
 import com.carrot.hanghae.domain.User;
-import com.carrot.hanghae.dto.CategoryDto;
-import com.carrot.hanghae.dto.ItemRequestDto;
-import com.carrot.hanghae.dto.ItemResponseDto;
-import com.carrot.hanghae.dto.UserItemResponseDto;
+import com.carrot.hanghae.dto.*;
 import com.carrot.hanghae.repository.CategoryRepository;
 import com.carrot.hanghae.repository.ImageUrlRepository;
 import com.carrot.hanghae.repository.ItemRepository;
@@ -71,7 +68,6 @@ public class ItemService {
         for(String imageUrl : imagePaths){
             ImageUrl image = new ImageUrl(imageUrl, item);
             imageUrlRepository.save(image);
-            images.add(image.getImageUrls());
             item.addImage(image);
         }
         //return 값 생성
