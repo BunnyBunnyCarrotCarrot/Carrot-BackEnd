@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import javax.annotation.PostConstruct;
 import java.util.TimeZone;
 
-@EnableJpaAuditing
+@EnableJpaAuditing // 시간 자동 변경이 가능하도록 합니다.
 @SpringBootApplication
 public class HanghaeApplication {
     public static void main(String[] args) {

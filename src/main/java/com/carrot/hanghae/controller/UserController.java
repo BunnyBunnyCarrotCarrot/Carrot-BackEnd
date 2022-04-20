@@ -1,8 +1,8 @@
 package com.carrot.hanghae.controller;
 
 import com.carrot.hanghae.domain.Location;
-import com.carrot.hanghae.dto.UserResponseDto;
 import com.carrot.hanghae.dto.UserSignupRequestDto;
+import com.carrot.hanghae.dto.UserResponseDto;
 import com.carrot.hanghae.repository.LocationRepository;
 import com.carrot.hanghae.security.UserDetailsImpl;
 import com.carrot.hanghae.service.S3Service;
@@ -16,11 +16,16 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController
-@RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
     private final S3Service s3Service;
     private final LocationRepository locationRepository;
+
+    public UserController(UserService userService, S3Service s3Service, LocationRepository locationRepository) {
+        this.userService = userService;
+        this.s3Service = s3Service;
+        this.locationRepository = locationRepository;
+    }
 
     @GetMapping("/user/signup")
     public List<Location> registerUser() {

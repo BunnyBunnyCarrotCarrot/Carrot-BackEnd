@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @Entity
-public class Good {
+public class Good extends Timestamped{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;

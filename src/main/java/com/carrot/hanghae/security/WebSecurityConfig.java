@@ -1,5 +1,6 @@
 package com.carrot.hanghae.security;
 
+import com.carrot.hanghae.repository.AuthRepository;
 import com.carrot.hanghae.security.filter.FormLoginFilter;
 import com.carrot.hanghae.security.filter.JwtAuthFilter;
 import com.carrot.hanghae.security.jwt.HeaderTokenExtractor;
