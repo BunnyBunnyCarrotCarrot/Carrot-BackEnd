@@ -29,8 +29,8 @@ public class testDataRunner implements ApplicationRunner {
         // 테스트 User 생성
         Location location = new Location(11L,"서울특별시");
         locationRepository.save(location);
-        User user0= new User("test","닉네임입니다", "1234", location, null);
-        User user1= new User("test2","닉네임입니다2", "12345", location, null);
+        User user0= new User("test","닉네임입니다", "1234", location);
+        User user1= new User("test2","닉네임입니다2", "12345", location);
         System.out.println("유저를 저장합니다.");
         userRepository.save(user0);
         userRepository.save(user1);
