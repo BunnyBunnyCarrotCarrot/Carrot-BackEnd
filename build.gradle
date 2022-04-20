@@ -41,6 +41,9 @@ dependencies {
 
     //validation 모듈 추가
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    // https://mvnrepository.com/artifact/com.querydsl/querydsl-jpa
+    implementation 'com.querydsl:querydsl-jpa:5.0.0'
+
 
 
     // 테스트 코드를 위한 Lombok 라이브러리

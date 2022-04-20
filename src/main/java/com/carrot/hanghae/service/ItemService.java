@@ -72,6 +72,7 @@ public class ItemService {
             ImageUrl image = new ImageUrl(imageUrl, item);
             imageUrlRepository.save(image);
             images.add(image.getImageUrls());
+            item.addImage(image);
         }
         //return 값 생성
         return new ItemResponseDto(title, price, images, category);

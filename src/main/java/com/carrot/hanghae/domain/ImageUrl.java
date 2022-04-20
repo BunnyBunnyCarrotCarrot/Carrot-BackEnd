@@ -1,5 +1,6 @@
 package com.carrot.hanghae.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,6 +20,7 @@ public class ImageUrl extends Timestamped {
     private String imageUrls;
 
     //@JsonIgnore
+    @JsonBackReference
     @ManyToOne //(fetch = FetchType.LAZY)
     @JoinColumn(name = "ITEM_ID", nullable = false)
     private Item item;
