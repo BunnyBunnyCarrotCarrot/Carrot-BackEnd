@@ -1,12 +1,16 @@
 package com.carrot.hanghae.domain;
 
+import com.carrot.hanghae.dto.ImageUrlDto;
 import com.carrot.hanghae.dto.ItemRequestDto;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Getter
@@ -35,6 +39,9 @@ public class Item extends Timestamped {
     @JoinColumn(name="CATEGORY_ID", nullable = false)
     private Category category;
 
+    @OneToMany(mappedBy = "item")
+    private List<ImageUrl> imageUrls = new ArrayList<>();
+
     @Column
     private Boolean status=false;
 
@@ -51,5 +58,10 @@ public class Item extends Timestamped {
         this.price = itemDto.getPrice();
         this.about = itemDto.getAbout();
         this.category = category;
+    }
+
+    public void addImage(ImageUrl imageUrl){
+        imageUrls.add(imageUrl);
+
     }
 }

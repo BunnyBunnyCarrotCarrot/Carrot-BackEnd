@@ -53,7 +53,7 @@ public class UserService {
     }
 
     private void checkUserPw(String inputPw, String inputPw2) {
-        Pattern userPwPattern = Pattern.compile("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$])[A-Za-z\\d!@#$]{8,16}$");
+        Pattern userPwPattern = Pattern.compile("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$])[A-Za-z\\d!@#$]{6,15}$");
         Matcher userPwMatcher = userPwPattern.matcher(inputPw);
         if (inputPw.length() == 0) {
             throw new CustomException(ErrorCode.BLANK_USER_PW);
