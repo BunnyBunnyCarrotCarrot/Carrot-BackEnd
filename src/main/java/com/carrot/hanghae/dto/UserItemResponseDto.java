@@ -24,12 +24,12 @@ public class UserItemResponseDto {
     private List<String> imageUrls;
     private Long categoryId;
     private String categoryName;
-    private int likeCount;
+    private Long likeCount;
     private boolean likeState;
     private LocalDateTime modefiedAt;
 
 
-    public UserItemResponseDto(Item item, User user, List<String> imageUrls, int likeCount, boolean likeState, Category category){
+    public UserItemResponseDto(Item item, User user, List<String> imageUrls, Long likeCount, boolean likeState, Category category){
         this.itemId = item.getId();
         this.userName = user.getUserName();
         this.title = item.getTitle();

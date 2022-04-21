@@ -1,14 +1,9 @@
 package com.carrot.hanghae.service;
 
-import com.carrot.hanghae.domain.Category;
-import com.carrot.hanghae.domain.ImageUrl;
-import com.carrot.hanghae.domain.Item;
-import com.carrot.hanghae.domain.User;
-import com.carrot.hanghae.dto.CategoryDto;
-import com.carrot.hanghae.dto.ItemRequestDto;
-import com.carrot.hanghae.dto.ItemResponseDto;
-import com.carrot.hanghae.dto.UserItemResponseDto;
+import com.carrot.hanghae.domain.*;
+import com.carrot.hanghae.dto.*;
 import com.carrot.hanghae.repository.CategoryRepository;
+import com.carrot.hanghae.repository.GoodRepository;
 import com.carrot.hanghae.repository.ImageUrlRepository;
 import com.carrot.hanghae.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +23,9 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final CategoryRepository categoryRepository;
     private final ImageUrlRepository imageUrlRepository;
+    private final GoodRepository goodRepository;
     private final S3Service s3Service;
+    private final GoodService goodService;
 
     //카테고리 조회
     public List<CategoryDto> findCategories() {
@@ -127,9 +124,19 @@ public class ItemService {
         Category category = item.getCategory();
 
         //좋아요 완성되면 넣기
-        Random rand = new Random();
-        int likeCount = rand.nextInt(100);
-        boolean likeState = true;
+//        Random rand = new Random();
+//        int likeCount = rand.nextInt(100);
+//        boolean likeState = true;
+//
+        //좋아요 상태, 좋아요 갯수
+        List<Long> goodUsers = new ArrayList<>();
+        List<Good> goodList = goodRepository.findAllByItemId(itemId);
+        for(Good good : goodList){
+            goodUsers.add(good.getId());
+        }
+        Long likeCount = (long) goodUsers.size();
+        GoodRequestDto goodRequestDto = new GoodRequestDto(itemId);
+        boolean likeState = goodService.goodStatus(goodRequestDto, user);
 
         return new UserItemResponseDto(item, user, images, likeCount, likeState, category);
     }

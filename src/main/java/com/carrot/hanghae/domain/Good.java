@@ -19,7 +19,7 @@ public class Good extends Timestamped{
     @JoinColumn(name="USER_ID", nullable = false)
     private User user;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name="ITEM_ID", nullable = false)
     private Item item;
 
