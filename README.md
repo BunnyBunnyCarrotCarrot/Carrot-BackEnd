@@ -6,14 +6,14 @@
 
 Backend(Spring)
 
-    김호빈 : 
-    박지연 : 
-    김일권 : 
+    김호빈 : 회원가입, 로그인, JWT, 마이페이지
+    박지연 : 게시글 작성, 수정, 삭제
+    김일권 : 전체 리스트, 좋아요
 
 Frontend(React) : 
 
-    김주탁
-    김예림
+    김주탁 : 회원가입, 로그인, 마이페이지
+    김예림 : 전체리스트, 작성, 수정, 삭제
 
 
 
@@ -28,7 +28,8 @@ Frontend(React) :
 - Spring security
 - H2
 - MySql
-- AWS
+- EC2
+- S3
 - GitHub
 
 
