@@ -37,7 +37,7 @@ public class MainResponseDto {
 
         List<ImageUrl> imageUrlList = item.getImageUrls();
         for(ImageUrl imageUrl : imageUrlList){
-            this.imageUrls.add(imageUrl.getImageUrls());
+            imageUrls.add(imageUrl.getImageUrls());
         }
     }
 }
