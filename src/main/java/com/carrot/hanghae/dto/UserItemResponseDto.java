@@ -17,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 public class UserItemResponseDto {
     private Long itemId;
-    private String userName;
+    private MainUserDto userName;
     private String title;
     private int price;
     private String about;
@@ -31,7 +31,7 @@ public class UserItemResponseDto {
 
     public UserItemResponseDto(Item item, User user, List<String> imageUrls, int likeCount, boolean likeState, Category category){
         this.itemId = item.getId();
-        this.userName = user.getUserName();
+        this.userName = new MainUserDto(user);
         this.title = item.getTitle();
         this.price = item.getPrice();
         this.about = item.getAbout();
