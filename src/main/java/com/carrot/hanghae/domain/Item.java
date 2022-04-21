@@ -1,17 +1,13 @@
 package com.carrot.hanghae.domain;
 
-import com.carrot.hanghae.dto.ImageUrlDto;
 import com.carrot.hanghae.dto.ItemRequestDto;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Getter
 @Setter

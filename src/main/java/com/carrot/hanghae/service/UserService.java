@@ -2,7 +2,6 @@ package com.carrot.hanghae.service;
 
 import com.carrot.hanghae.domain.Location;
 import com.carrot.hanghae.domain.User;
-import com.carrot.hanghae.dto.UserDetailDto;
 import com.carrot.hanghae.dto.UserSignupRequestDto;
 import com.carrot.hanghae.exception.CustomException;
 import com.carrot.hanghae.exception.ErrorCode;
@@ -71,7 +70,7 @@ public class UserService {
     }
 
     private void checkUserName(String userName) {
-        Pattern userNamePattern = Pattern.compile("^\\S{2,6}$");
+        Pattern userNamePattern = Pattern.compile("^\\S{2,10}$");
         Matcher userNameMatcher = userNamePattern.matcher(userName);
 
         Optional<User> foundByName = userRepository.findByUserName(userName);
