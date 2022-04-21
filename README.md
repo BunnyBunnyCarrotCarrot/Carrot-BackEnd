@@ -34,7 +34,10 @@ Frontend(React) :
 
 
 ## Notion Postman
-https://flicker-homegrown-973.notion.site/99-A-9-15c6f4681ed24f809d5ded127bb015bc
+https://flicker-homegrown-973.notion.site/99-A-9-15c6f4681ed24f809d5ded127bb015bc'
+
+## 시연영상
+https://www.youtube.com/watch?v=3zetlJRwlXU
 
 ## ERD
 
